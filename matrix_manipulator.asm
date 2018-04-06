@@ -11,6 +11,8 @@ menu: .asciiz "1.Addition\n2.Subtraction\n3.Multiplication\n4.Transpose\n5.Deter
 
 choice: .asciiz "\nEnter your choice(1-7):"
 
+num_scale:.asciiz "\nEnter number for scaling:"
+
 wrongchoice: .asciiz "\nWrong choice entered!!"
 exiting: .asciiz "\n\tTHANK YOU!!"
 show_result: .asciiz "Result:\n"
@@ -145,7 +147,7 @@ INPUT:
     move $a3,$s3
 
 	blez $t0, Label0
-	bgt $t0, $t6, Label0
+	bgt $t0, $t7, Label0
 	beq $t0, $t1, Label1
 	beq $t0, $t2, Label2
 	beq $t0, $t3, Label3
@@ -192,7 +194,6 @@ addition:
     move $s0,$a0
     move $s1,$a1
     move $s2,$a2
-    move $s3,$a3
     xor $t1, $t1, $t1
 
     L1:
@@ -203,11 +204,6 @@ addition:
         L2:
             slt $t0, $t2, $s0
             beq $t0, $zero, endL2
-
-            mul $t3, $t1, $s0
-            addu $t3, $t3, $t2
-            sll $t3, $t3, 2
-            addu $t3, $t3, $s3
 
             mul $t4, $t1, $s0
             addu $t4, $t4, $t2
@@ -224,21 +220,26 @@ addition:
 
             add $t8, $t6, $t7
 
-            sw $t8, 0($t3)
+            li $v0,1
+            move $a0, $t8
+            syscall
+
+            li $v0,4
+            la $a0,space
+            syscall
 
             addiu $t2, $t2, 1
             j L2
     endL2:
         addiu $t1, $t1, 1
+
+        li $v0,4
+        la $a0, newline
+        syscall
+
         j L1
 endL1:
-    # Print resultant  addition matrix
-	li $v0, 4
-	la $a0, show_result
-	syscall
 
-	move $a1, $s3
-	jal printMatrix
     jr $ra
 .end addition
 
@@ -248,7 +249,6 @@ subtraction:
     move $s0,$a0
     move $s1,$a1
     move $s2,$a2
-    move $s3,$a3
     xor $t1, $t1, $t1
 
     L3:
@@ -259,11 +259,6 @@ subtraction:
         L4:
             slt $t0, $t2, $s0
             beq $t0, $zero, endL4
-
-            mul $t3, $t1, $s0
-            addu $t3, $t3, $t2
-            sll $t3, $t3, 2
-            addu $t3, $t3, $s3
 
             mul $t4, $t1, $s0
             addu $t4, $t4, $t2
@@ -279,22 +274,26 @@ subtraction:
             lw $t7, 0($t5)
 
             sub $t8, $t6, $t7
-            sw $t8, 0($t3)
+
+            li $v0,1
+            move $a0,$t8
+            syscall
+
+            li $v0,4
+            la $a0,space
+            syscall
 
             addiu $t2, $t2, 1
             j L4
 
     endL4:
+        li $v0,4
+        la $a0,newline
+        syscall
+
         addiu $t1, $t1, 1
         j L3
 endL3:
-    # Print resultant  addition matrix
-	li $v0, 4
-	la $a0, show_result
-	syscall
-
-	move $a1, $s3
-	jal printMatrix
     jr $ra
 .end subtraction
 
@@ -305,6 +304,7 @@ multiplication:
     move $s1,$a1
     move $s2,$a2
     move $s3,$a3
+
     xor $t1, $t1, $t1				# loop 1 variable
 
     L5:
@@ -346,30 +346,32 @@ multiplication:
                 lw $t8, 0($t4)
                 addu $t9, $t9, $t8		# resultant += matA[i][k] * matB[k][j]
 
-                sw $t9, 0($t4)
-
+                sw $t9,0($t4)
                 addiu $t3, $t3, 1
 
                 j L7
 
 		endL7:
+            li $v0,1
+            move $a0,$t9
+            syscall
 
-		addiu $t2, $t2, 1
-		j L6
+            li $v0,4
+            la $a0,space
+            syscall
+
+            addiu $t2, $t2, 1
+            j L6
 
 	endL6:
+        li $v0,4
+        la $a0,newline
+        syscall
 
-	addiu $t1, $t1, 1
-	j L5
+        addiu $t1, $t1, 1
+        j L5
 
 endL5:
-    # Print resultant  addition matrix
-	li $v0, 4
-	la $a0, show_result
-	syscall
-
-	move $a1, $s3
-	jal printMatrix
     jr $ra
 .end multiplication
 
@@ -378,7 +380,7 @@ endL5:
 transpose:
     move $s0,$a0
     move $s1,$a1
-    move $s3,$a3
+
     xor $t1, $t1, $t1
 
 	L8:
@@ -389,10 +391,6 @@ transpose:
 		L9:
 			slt $t0, $t2, $s0
 			beq $t0, $zero, endL9
-			mul $t3, $t1, $s0
-			addu $t3, $t3, $t2
-			sll $t3, $t3, 2
-			addu $t3, $t3, $s3
 
 			mul $t4, $t2, $s0
 			addu $t4, $t4, $t1
@@ -400,21 +398,25 @@ transpose:
 			addu $t4, $t4, $s1
 
 			lw $t5, 0($t4)
-			sw $t5, 0($t3)
+
+			li $v0,1
+			move $a0,$t5
+			syscall
+
+			li $v0,4
+			la $a0,space
+			syscall
 
 			addiu $t2, $t2, 1
 			j L9
         endL9:
+            li $v0,4
+            la $a0,newline
+            syscall
+
             addiu $t1, $t1, 1
             j L8
     endL8:
-        # Print resultant  addition matrix
-        li $v0, 4
-        la $a0, show_result
-        syscall
-
-        move $a1, $s3
-        jal printMatrix
         jr $ra
 .end transpose
 
@@ -570,8 +572,15 @@ determinant:
 scaling:
     move $s0,$a0
     move $s1,$a1
-    move $s2,$a2
-    move $s3,$a3
+
+    li $v0,4
+    la $a0,num_scale
+    syscall
+
+    li $v0,5
+    syscall
+
+    move $s7,$v0
     xor $t1, $t1, $t1
 
     L11:
@@ -583,35 +592,33 @@ scaling:
             slt $t0, $t2, $s0
             beq $t0, $zero, endL12
 
-            mul $t3, $t1, $s0
-            addu $t3, $t3, $t2
-            sll $t3, $t3, 2
-            addu $t3, $t3, $s3
-
             mul $t4, $t1, $s0
             addu $t4, $t4, $t2
             sll $t4, $t4, 2
             addu $t4, $t4, $s1
 
             lw $t5,0($t4)
-            mul $t5,$t5,$s2
-            sw $t5,0($t3)
+            mul $t5,$t5,$s7
+
+            li $v0,1
+            move $a0,$t5
+            syscall
+
+            li $v0,4
+            la $a0,space
+            syscall
 
             addiu $t2, $t2, 1
             j L12
     endL12:
+        li $v0,4
+        la $a0,newline
+        syscall
+
         addiu $t1, $t1, 1
         j L11
 
 endL11:
-# Print resultant  addition matrix
-	li $v0, 4
-	la $a0, show_result
-	syscall
-
-	move $a1, $s3
-	jal printMatrix
-
     jr $ra
 .end scaling
 
