@@ -1,24 +1,24 @@
 .data
-dimension: .asciiz "Enter matrix dimension: "
+	dimension: .asciiz "Enter dimension of the matrix: "
 
-enter_first: .asciiz "Enter first matrix:\n"
-enter_second: .asciiz "Enter second matrix:\n"
+	enter_first: .asciiz "Enter first matrix:\n"
+	enter_second: .asciiz "Enter second matrix:\n"
 
-show_first: .asciiz "First entered matrix:\n"
-show_second: .asciiz "Second entered matrix:\n"
+	show_first: .asciiz "First matrix:\n"
+	show_second: .asciiz "Second matrix:\n"
 
-menu: .asciiz "1.Addition\n2.Subtraction\n3.Multiplication\n4.Transpose\n5.Determinant\n6.Scaling\n7.Exit"
+	menu: .asciiz "\n1.Addition\n2.Subtraction\n3.Multiplication\n\nThe Following operations are for the first matrix\n4.Transpose\n5.Determinant\n6.Scaling\n7.Exit"
 
-choice: .asciiz "\nEnter your choice(1-7):"
+	choice: .asciiz "\nEnter your choice :"
 
-num_scale:.asciiz "\nEnter number for scaling:"
+	num_scale:.asciiz "\nEnter a number for scaling:"
 
-wrongchoice: .asciiz "\nWrong choice entered!!"
-exiting: .asciiz "\n\tTHANK YOU!!"
-show_result: .asciiz "Result:\n"
+	wrongchoice: .asciiz "\nInvalid Choice!"
+	exiting: .asciiz "\n\tExiting."
+	show_result: .asciiz "Result:\n"
 
-space: .asciiz " "
-newline: .asciiz "\n"
+	space: .asciiz " "
+	newline: .asciiz "\n"
 
 .text
 .globl main
