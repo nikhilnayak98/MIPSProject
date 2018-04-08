@@ -29,13 +29,7 @@ int main()
 	printf("\nSecond entered matrix is as follows:\n");
 	print_matrix(B,n);
 	printf("\nMENU\n");
-	printf("1.ADDITION\n");
-	printf("2.SUBTRACTION\n");
-	printf("3.MULTIPLICATION\n");
-	printf("4.TRANSPOSE\n");
-	printf("5.DETERMINANT\n");
-	printf("6.SCALING\n");
-	printf("7.EXIT\n");
+	printf("1.ADDITION\n2.SUBTRACTION\n3.MULTIPLICATION\n4.TRANSPOSE\n5.DETERMINANT\n6.SCALING\n7.EXIT\n");
 	printf("Enter your choice=> ");
 	scanf("%d",&choice);
 	while(choice!=7){
